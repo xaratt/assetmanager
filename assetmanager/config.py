@@ -1,6 +1,6 @@
 
 class Config(object):
-    DEBUG = True
+    DEBUG = False
     MONGODB_SETTINGS = {'DB': "assetmanager"}
     SECRET_KEY = "Jeljwflj3489csdN<"
 
