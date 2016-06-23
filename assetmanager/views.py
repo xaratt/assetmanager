@@ -46,6 +46,9 @@ class AssetListResource(Resource):
             assets = assets_q.limit(limit)
         else:
             assets = assets_q.all()
+        print("*"*50)
+        print( [asset.to_export() for asset in assets])
+        print("*"*50)
         return [asset.to_export() for asset in assets]
 
     def post(self):
