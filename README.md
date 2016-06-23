@@ -10,11 +10,11 @@ Installation
 
 Import data from RSS:
 
-   python manage.py import -u http://www.wdcdn.net/rss/presentation/library/client/iowa/id/e5d10087fd878ba5dc8ea7857495710b 
+   python manage.py import -u http://www.wdcdn.net/rss/presentation/library/client/iowa/id/e5d10087fd878ba5dc8ea7857495710b
 
 Run the app:
 ------------
-   
+
     python manage.py runserver
 
 Goto: [http://localhost:8888/asset](http://localhost:8888/asset)
