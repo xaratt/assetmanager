@@ -5,10 +5,16 @@ import json
 
 class AssetResource(Resource):
 
+    """
+    Get asset
+    """
     def get(self, title):
         asset = Asset.objects.get_or_404(title=title)
         return asset.to_export(), 200
 
+    """
+    Update asset
+    """
     def put(self, title):
         asset = Asset.objects.get_or_404(title=title)
         data = request.get_json()
@@ -18,8 +24,10 @@ class AssetResource(Resource):
             asset.save()
         except Exception as e:
             return {"error": e.message}, 422
-        return asset.to_export(), 201
-
+        return asset.to_export(), 200
+    """
+    Delete asset
+    """
     def delete(self, title):
         asset = Asset.objects.get_or_404(title=title)
         asset.delete()
@@ -28,6 +36,12 @@ class AssetResource(Resource):
 
 class AssetListResource(Resource):
 
+    """
+    Get assets list.
+    Query params:
+      * order asc|desc - asc/desc list ordering by title
+      * limit int - limits number of results
+    """
     def get(self):
         order_by = request.args.get("order", "asc")
         order_by_field = "title"
@@ -46,28 +60,34 @@ class AssetListResource(Resource):
             assets = assets_q.limit(limit)
         else:
             assets = assets_q.all()
-        print("*"*50)
-        print( [asset.to_export() for asset in assets])
-        print("*"*50)
-        return [asset.to_export() for asset in assets]
+        return [asset.to_export() for asset in assets], 200
 
+    """
+    Create new asset
+    """
     def post(self):
         try:
             asset = Asset(**request.get_json())
             asset.save()
         except Exception as e:
             return {"error": e.message}, 422
-        return asset.to_export()
+        return asset.to_export(), 201
 
 
 class CreditResource(Resource):
 
+    """
+    Get credit
+    """
     def get(self, asset_title, role):
         credit = Asset.objects.get_or_404(title=asset_title).credits.filter(role=role)
         if not credit:
             return {"error": "Credit not found"}, 404
-        return credit.to_export(), 200
+        return credit[0].to_export(), 200
 
+    """
+    Update credit
+    """
     def put(self, asset_title, role):
         asset = Asset.objects.get_or_404(title=asset_title)
         credit = asset.credits.filter(role=role)[0]
@@ -80,23 +100,32 @@ class CreditResource(Resource):
             asset.save()
         except Exception as e:
             return {"error": e.message}, 422
-        return credit.to_export(), 201
+        return credit.to_export(), 200
 
+    """
+    Delete credit
+    """
     def delete(self, asset_title, role):
         asset = Asset.objects.get_or_404(title=asset_title)
         credit = asset.credits.filter(role=role)
         if not credit:
             return {"error": "Credit not found"}, 404
-        print("XXX", Asset.objects(title=asset_title).update_one(pull__credits__role=role))
+        Asset.objects(title=asset_title).update_one(pull__credits__role=role)
         return "", 204
 
 
 class CreditListResource(Resource):
 
+    """
+    Get credits list for asset
+    """
     def get(self, asset_title):
         asset = Asset.objects.get_or_404(title=asset_title)
         return [credit.to_export() for credit in asset.credits], 200
 
+    """
+    Create credit for asset
+    """
     def post(self, asset_title):
         asset = Asset.objects.get_or_404(title=asset_title)
         credit = Credit(**request.get_json())

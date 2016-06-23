@@ -41,3 +41,4 @@ class Asset(db.Document):
             data["published_at"] = int(time.mktime(data["published_at"].timetuple()))
         data["credits"] = [credit.to_export() for credit in self.credits]
         return data
+
