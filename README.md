@@ -1,8 +1,7 @@
 Asset Manager
 =================
 
-Installation
-------------
+### Installation
 
   1. Install [pip](http://www.pip-installer.org/en/latest/installing.html)
   2. Make a [virtualenv](http://virtualenvwrapper.readthedocs.org/en/latest/#introduction) for this project
@@ -12,8 +11,11 @@ Import data from RSS:
 
    python manage.py import -u http://www.wdcdn.net/rss/presentation/library/client/iowa/id/e5d10087fd878ba5dc8ea7857495710b
 
-Run the app:
-------------
+### Run the tests
+
+    python tests.py
+
+### Run the app
 
     python manage.py runserver
 
